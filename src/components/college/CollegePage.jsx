@@ -55,16 +55,32 @@ export default function CollegePage({ data }) {
   return (
     <div style={{ background: "#f3f4f6", minHeight: "100vh", fontFamily: "'Segoe UI',-apple-system,sans-serif", color: "#111827" }}>
 
+      {/* Responsive CSS */}
+      <style>{`
+        .clg-banner { padding: 10px 28px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #e5e7eb; }
+        .clg-name { font-size: 14px; font-weight: 800; color: #111827; line-height: 1.3; }
+        .clg-meta { font-size: 11px; margin-top: 1px; }
+        .clg-body { max-width: 1120px; margin: 0 auto; padding: 18px 20px 50px; display: flex; gap: 20px; align-items: flex-start; }
+        .clg-sidebar { width: 292px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; position: sticky; top: 120px; }
+        @media (max-width: 768px) {
+          .clg-sidebar { display: none !important; }
+          .clg-banner { padding: 8px 12px; gap: 8px; }
+          .clg-name { font-size: 11px; }
+          .clg-meta { display: none; }
+          .clg-body { padding: 12px 10px 40px; }
+        }
+      `}</style>
+
       {/* STICKY HEADER */}
       <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000, background: "#fff", boxShadow: scrolled ? "0 2px 12px rgba(0,0,0,0.1)" : "0 1px 4px rgba(0,0,0,0.06)" }}>
         {/* College banner */}
-        <div style={{ padding: "10px 28px", display: "flex", alignItems: "center", gap: 12, borderBottom: "1px solid #e5e7eb", flexWrap: "wrap" }}>
+        <div className="clg-banner">
           <div style={{ width: 42, height: 42, borderRadius: "50%", background: P, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, border: "2px solid #fff", boxShadow: "0 0 5px rgba(0,0,0,0.2)" }}>
             <span style={{ fontSize: 11, fontWeight: 900, color: "#fff" }}>{data.code}</span>
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#111827" }}>{data.name} - Admission 2026, Cutoff, Courses, Fees, Placements</div>
-            <div style={{ fontSize: 11, color: G, marginTop: 1 }}>
+            <div className="clg-name">{data.shortName} - Admission 2026, Cutoff, Courses, Fees, Placements</div>
+            <div className="clg-meta" style={{ color: G }}>
               📍 {data.location} &nbsp;·&nbsp;
               <span style={{ color: "#f59e0b" }}>{"★".repeat(Math.round(data.rating))}</span>&nbsp;
               <strong>{data.rating}</strong>/5 ({data.totalReviews}+ Reviews) &nbsp;·&nbsp;
@@ -72,16 +88,16 @@ export default function CollegePage({ data }) {
             </div>
           </div>
           <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-            <button onClick={() => setShowModal(true)} style={{ background: O, color: "#fff", border: "none", borderRadius: 6, padding: "8px 16px", fontWeight: 700, fontSize: 12, cursor: "pointer" }}>Apply Now</button>
-            <button style={{ background: "none", color: P, border: `1.5px solid ${P}`, borderRadius: 6, padding: "7px 14px", fontWeight: 600, fontSize: 12, cursor: "pointer" }}>Compare</button>
+            <button onClick={() => setShowModal(true)} style={{ background: O, color: "#fff", border: "none", borderRadius: 6, padding: "8px 14px", fontWeight: 700, fontSize: 12, cursor: "pointer" }}>Apply Now</button>
+            <button style={{ background: "none", color: P, border: `1.5px solid ${P}`, borderRadius: 6, padding: "7px 12px", fontWeight: 600, fontSize: 12, cursor: "pointer" }}>Compare</button>
           </div>
         </div>
 
         {/* Tabs */}
-        <div style={{ display: "flex", overflowX: "auto", background: "#fff", borderBottom: "2px solid #e5e7eb", padding: "0 24px" }}>
+        <div style={{ display: "flex", overflowX: "auto", background: "#fff", borderBottom: "2px solid #e5e7eb", padding: "0 12px" }}>
           {TABS.map(t => (
             <button key={t} onClick={() => setActiveTab(t)} style={{
-              background: "none", border: "none", padding: "10px 15px", fontSize: 13, cursor: "pointer", whiteSpace: "nowrap",
+              background: "none", border: "none", padding: "10px 12px", fontSize: 12, cursor: "pointer", whiteSpace: "nowrap",
               fontWeight: t === activeTab ? 700 : 400,
               color: t === activeTab ? P : G,
               borderBottom: t === activeTab ? `2.5px solid ${P}` : "2.5px solid transparent",
@@ -94,7 +110,7 @@ export default function CollegePage({ data }) {
       <div style={{ height: 104 }} />
 
       {/* BODY */}
-      <div style={{ maxWidth: 1120, margin: "0 auto", padding: "18px 20px 50px", display: "flex", gap: 20, alignItems: "flex-start" }}>
+      <div className="clg-body">
 
         {/* MAIN */}
         <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 18 }}>
@@ -104,9 +120,8 @@ export default function CollegePage({ data }) {
           {renderContent()}
         </div>
 
-        {/* SIDEBAR */}
-        <div style={{ width: 292, flexShrink: 0, display: "flex", flexDirection: "column", gap: 16, position: "sticky", top: 120 }}>
-          {/* Nearby colleges */}
+        {/* SIDEBAR — hidden on mobile via CSS */}
+        <div className="clg-sidebar">
           <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #e5e7eb", padding: 16, boxShadow: "0 1px 4px rgba(0,0,0,0.05)" }}>
             <div style={{ fontWeight: 700, fontSize: 14, color: "#111827", marginBottom: 14, textAlign: "center" }}>Admissions Open (Nearby Colleges)</div>
             {SIDEBAR_COLLEGES.map((c, i) => (
@@ -123,7 +138,6 @@ export default function CollegePage({ data }) {
             ))}
           </div>
 
-          {/* Enquire form */}
           <div style={{ background: "linear-gradient(135deg,#1a1a2e,#0f3460)", color: "#fff", borderRadius: 10, padding: 16 }}>
             <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 4 }}>Interested in {data.shortName}?</div>
             <div style={{ fontSize: 11, color: "#94a3b8", marginBottom: 14 }}>Get updates on Eligibility, Admission & Fees</div>
